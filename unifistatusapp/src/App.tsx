@@ -31,9 +31,7 @@ function App() {
       </div>
       <div className="card">
         <h2>Dispositivos</h2>
-        <textarea >
-          {JSON.stringify(data, null, 2)}
-        </textarea>
+        {/* <p>{data.[0]}</p> */}
 
       </div>
     </>
