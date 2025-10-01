@@ -1,6 +1,7 @@
 import ubiquitilogo from "./assets/ubiquiti-svgrepo-com.svg";
 import "./App.css";
 import { useFetch } from "./hooks/useFetch";
+import { useState } from "react";
 
 const API_URL = import.meta.env.VITE_API_URL;
 const API_KEY = import.meta.env.VITE_UNIFI_KEY;
@@ -8,18 +9,16 @@ const API_KEY = import.meta.env.VITE_UNIFI_KEY;
 function App() {
   const { data } = useFetch(API_URL, API_KEY);
 
+  const [useStatus, setUseStatus] = useState('logo');
+
   console.log(data);
 
   return (
     <>
-      <div>
-        <a href="#" target="_blank">
-          <img src={ubiquitilogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
+      <img src={ubiquitilogo} className={useStatus}  alt="ubiquit logo" />
       <h1>UniFi Status</h1>
-
-      <div className="card">
+      <h2>Dispositivos: {data && data.data ? data.data.length : 0}</h2>
+      <div className="">
         <h2>Monitoramento de Dispositivos Unifi</h2>
 
         {/* Verificação 1: Se 'data' ainda não chegou (carregando) */}
@@ -48,10 +47,10 @@ function App() {
                   marginBottom: "10px",
                   listStyleType: "none",
                   padding: "10px",
-                  border: "2px solid" + (device.reportedState.state === "connected" ? "#4caf50" : "#f44336"),
+                  border: "1px solid" + (device.reportedState.state === "connected" ? "#465c47ff" : "#f44336"),
                   borderRadius: "15px",
-                  backgroundColor: "#f9f9f9ff",
-                  color: "#333",
+                  backgroundColor: "#333",
+                  color: "##f9f9f9ff",
                   minWidth: "180px", // opcional, para garantir largura mínima
                   maxWidth: "23%",
                   display: "flex",
@@ -62,11 +61,14 @@ function App() {
                 }}
               >
                 <strong style={{display: "flex", flexDirection: "row", alignItems: "anchor-center", gap: "5px"}}>
-                  <p style={{color: device.reportedState.state === "connected" ? "#4caf50" : "#f44336", fontSize: "17px"}} >•</p>
-                  {device.reportedState.hostname}
+                  <p style={{color: device.reportedState.state === "connected" ? "rgb(55, 190, 95)" : "#f44336", fontSize: "17px"}} >•</p>
+                  {device.reportedState.name}
                 </strong>
                 <span>{device.reportedState.ip}</span>
-                <span>Status: {device.reportedState.state}</span>
+                <span style={{fontSize: "9px"}}>
+                  Status: {device.reportedState.state} <br />
+                  {device.reportedState.hardware.name}
+                </span>
               </li>
             ))}
           </ul>
